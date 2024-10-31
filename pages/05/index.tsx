@@ -2,15 +2,13 @@
 
 import Navbar from "@/components/Navbar";
 import WheelSpinner from "@/components/WheelSpinner";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Home = () => {
-	const bigWheelRef = useRef<HTMLDivElement>(null);
-	const smallWheelRef = useRef<HTMLDivElement>(null);
 	const [isMounted, setIsMounted] = useState(false);
-	const [isSpinning, setIsSpinning] = useState(false);
 	const [prizeResult, setPrizeResult] = useState(0);
 	const [miniPrizeResult, setMiniPrizeResult] = useState(0);
+	const [timeSpin, setTimeSpin] = useState(4);
 
 	const [prizes, setPrizes] = useState([
 		{
@@ -88,12 +86,64 @@ const Home = () => {
 							<div className="w-full overflow-auto no-scrollbar">
 								<div className="w-full flex flex-col">
 									<div className="relative w-full min-h-full overflow-hidden">
+										<div className="flex flex-col gap-2 justify-center items-center w-full">
+											<span className="">Time Spin</span>
+											<div className="w-80">
+												<input
+													type="range"
+													min={1}
+													max={5}
+													value={timeSpin}
+													className="range"
+													step={1}
+													onChange={(e) =>
+														setTimeSpin(parseInt(e.target.value))
+													}
+												/>
+												<div className="flex w-full justify-between px-2 text-xs">
+													<span>1</span>
+													<span>2</span>
+													<span>3</span>
+													<span>4</span>
+													<span>5</span>
+												</div>
+											</div>
+											<select
+												defaultValue={0}
+												className="select select-bordered w-full max-w-xs"
+												onChange={(e) =>
+													setPrizeResult(parseInt(e.target.value))
+												} // Update the prize result when the select value changesrizeResult}
+											>
+												<option disabled>Big Wheel</option>
+												{prizes.map((prize, index) => (
+													<option key={index} value={index}>
+														{prize.label}
+													</option>
+												))}
+											</select>
+											<select
+												defaultValue={0}
+												className="select select-bordered w-full max-w-xs"
+												onChange={(e) =>
+													setMiniPrizeResult(parseInt(e.target.value))
+												}
+											>
+												<option disabled>Small Wheel</option>
+												{miniPrizes.map((prize, index) => (
+													<option key={index} value={index}>
+														{prize.label}
+													</option>
+												))}
+											</select>
+										</div>
 										<div className="px-4 flex flex-col">
 											<WheelSpinner
 												prizes={prizes}
 												miniPrizes={miniPrizes}
-												resultIndex={6}
-												miniResultIndex={1}
+												resultIndex={prizeResult}
+												miniResultIndex={miniPrizeResult}
+												timeSpin={timeSpin}
 											/>
 										</div>
 									</div>
