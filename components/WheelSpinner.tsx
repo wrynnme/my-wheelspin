@@ -1,7 +1,7 @@
 import congratsRing from "@/public/imgs/congrats_ring.gif";
 import spinCoin from "@/public/imgs/spin_coin.png";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Prize {
 	id: string;
@@ -30,6 +30,17 @@ const WheelSpinner: React.FC<WheelSpinnerProps> = ({
 	const [isSpinning, setIsSpinning] = useState(false);
 	const [bigWheelAngle, setBigWheelAngle] = useState(0);
 	const [smallWheelAngle, setSmallWheelAngle] = useState(0);
+
+	useEffect(() => {
+		console.log(generateClipPathPolygon(prizes.length));
+	}, [prizes]);
+	const generateClipPathPolygon = (segments: number) => {
+		const anglePerSegment = 360 / segments;
+		const radians = (anglePerSegment * Math.PI) / 180;
+		const heightPercentage = Math.sin(radians) * 100;
+
+		return heightPercentage.toFixed(2);
+	};
 	// const [timeSpin, setTimeSpin] = useState(1);
 
 	const getRandomOffset = (min: number, max: number) => {
@@ -121,7 +132,11 @@ const WheelSpinner: React.FC<WheelSpinnerProps> = ({
 									<div
 										className="absolute w-full h-full top-[50%] left-[50%]"
 										style={{
-											clipPath: "polygon(0% 0%, 100% 0%, 70.71% 70.71%)",
+											clipPath: `polygon(0% 0%, 100% 0%, 70.71% 70.71%)`,
+											// clipPath: `polygon(0% 0%, 100% 0%, 50% 100%)`,
+											/* clipPath: `polygon(0% 0%, 100% 0%, ${generateClipPathPolygon(
+												miniPrizes.length
+											)}% ${generateClipPathPolygon(miniPrizes.length)}%)`, */
 											background: `${
 												index % 2 !== 0
 													? "linear-gradient(220deg, rgb(235, 125, 0) 22%, rgb(235, 125, 0) 52%)"
@@ -206,6 +221,7 @@ const WheelSpinner: React.FC<WheelSpinnerProps> = ({
 												}`}
 												style={{
 													clipPath: "polygon(0% 0%, 100% 0%, 50% 86.6%)",
+													// clipPath: `polygon(0% 0%, 100% 0%, 50% 100%)`,
 												}}
 											>
 												<div
