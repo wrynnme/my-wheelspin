@@ -14,6 +14,7 @@ interface WheelSpinnerProps {
 	miniPrizes: any[];
 	resultIndex: number;
 	miniResultIndex: number;
+	timeSpin?: number;
 }
 
 const WheelSpinner: React.FC<WheelSpinnerProps> = ({
@@ -21,6 +22,7 @@ const WheelSpinner: React.FC<WheelSpinnerProps> = ({
 	miniPrizes,
 	resultIndex,
 	miniResultIndex,
+	timeSpin = 1,
 }) => {
 	const bigWheelRef = useRef<HTMLDivElement>(null);
 	const smallWheelRef = useRef<HTMLDivElement>(null);
@@ -28,7 +30,7 @@ const WheelSpinner: React.FC<WheelSpinnerProps> = ({
 	const [isSpinning, setIsSpinning] = useState(false);
 	const [bigWheelAngle, setBigWheelAngle] = useState(0);
 	const [smallWheelAngle, setSmallWheelAngle] = useState(0);
-	const [timeSpin, setTimeSpin] = useState(1);
+	// const [timeSpin, setTimeSpin] = useState(1);
 
 	const getRandomOffset = (min: number, max: number) => {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -46,7 +48,6 @@ const WheelSpinner: React.FC<WheelSpinnerProps> = ({
 		const stopAngle = (segments - resultIndex) * degreesPerSegment;
 		// const randomOffset = Math.floor(Math.random() * degreesPerSegment);
 		const randomOffset = getRandomOffset(4, degreesPerSegment - 4);
-		console.log("🚀 ~ randomOffset:", randomOffset);
 		const offsetAngle = currentAngle() + randomOffset;
 
 		const additionalRotation =
@@ -88,18 +89,16 @@ const WheelSpinner: React.FC<WheelSpinnerProps> = ({
 			);
 			setIsSpinning(false); // Re-enable the button
 
-			console.log(`Big Wheel Angle: ${bigWheelAngle}`);
+			/* console.log(`Big Wheel Angle: ${bigWheelAngle}`);
 			console.log(`Small Wheel Angle: ${smallWheelAngle}`);
 			console.log(
 				`Big Prize: ${prizes[resultIndex]?.label}, Mini Prize: ${miniPrizes[miniResultIndex]?.label}`
-			);
+			); */
 		}, timeSpin * 1000);
 	};
 
 	return (
 		<>
-			{`big wheel angle: ${bigWheelAngle}`}
-			{`small wheel angle: ${smallWheelAngle}`}
 			<div className="flex justify-center items-center w-full py-10">
 				<div className="relative w-[300px] h-[300px] xs:w-[300px] xs:h-[300px] flex justify-center items-center">
 					<div className="absolute w-[300px] h-[300px] xs:w-[300px] xs:h-[300px] flex justify-center items-center transition-all rounded-full overflow-hidden">
